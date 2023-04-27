@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { raceWith } from 'rxjs';
 import { ProductsService } from 'src/app/service/products.service';
 
 @Component({
@@ -15,13 +16,21 @@ export class CartListComponent implements OnInit{
   constructor(public productsService: ProductsService, private router: Router) { }
 
   ngOnInit(): void {
-    this.productsService.getCartList();
-    this.calculate();
+    //this.productsService.getCartList();
+    //this.calculate();
+    this.getCartList();
   }
 
-  addPrdToWishlist(prd:any, removeBool:boolean, prdIdx:number){ 
-    this.productsService.addProductToWhishlist(prd, removeBool, prdIdx);
-    this.removeProductFromCart(prdIdx);
+  getCartList() {
+      this.productsService.getCartList().subscribe( (response:any)=>{ 
+      this.productsService.cartProducts = response.content;
+      this.calculate();
+    });
+  }
+
+  addPrdToWishlist(cart:any, removeBool:boolean, prdIdx:number){ 
+    this.productsService.addProductToWhishlist(cart, removeBool, prdIdx);
+    this.removeProductFromCart(cart.cartId);
     this.calculate();
   }
 
@@ -29,7 +38,8 @@ export class CartListComponent implements OnInit{
     //let elements = this.productsService.cartProducts.splice(prdIdx, 1);
     //console.log(elements[0]['title'], "Product Removed from Cart");
     this.productsService.deleteCartItem(cartId).subscribe(response=>{
-      this.productsService.getCartList();
+      //this.productsService.getCartList();
+      this.getCartList();
     })
     this.calculate();
   }
@@ -40,6 +50,7 @@ export class CartListComponent implements OnInit{
 
   calculate() {
     console.log(this.productsService.cartProducts);
+    if(this.productsService.cartProducts)
     this.totalItems = this.productsService.cartProducts.reduce((prev,next)=> prev+next['quantity'],0);
     this.totalPrice = this.productsService.cartProducts.reduce((prev,next)=> prev+ (next['quantity']*next.products['price']),0);
   }
