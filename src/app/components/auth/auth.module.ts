@@ -6,6 +6,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes:Routes = [
   { path: 'login', component : LoginComponent },
@@ -24,7 +25,7 @@ const routes:Routes = [
     UserProfileComponent
   ],
   imports: [
-    CommonModule, RouterModule.forChild(routes)
+    CommonModule, RouterModule.forChild(routes), ReactiveFormsModule
   ],
   exports: [RouterModule]
 })

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ProductsService } from 'src/app/service/products.service';
 
@@ -7,7 +7,7 @@ import { ProductsService } from 'src/app/service/products.service';
   templateUrl: './cart-list.component.html',
   styleUrls: ['./cart-list.component.css']
 })
-export class CartListComponent implements OnInit {
+export class CartListComponent implements OnInit{
 
   public totalItems:number=0;
   public totalPrice:number=0;
@@ -15,6 +15,7 @@ export class CartListComponent implements OnInit {
   constructor(public productsService: ProductsService, private router: Router) { }
 
   ngOnInit(): void {
+    this.productsService.getCartList();
     this.calculate();
   }
 
@@ -24,9 +25,12 @@ export class CartListComponent implements OnInit {
     this.calculate();
   }
 
-  removeProductFromCart(prdIdx:number){ 
-    let elements = this.productsService.cartProducts.splice(prdIdx, 1);
-    console.log(elements[0]['title'], "Product Removed from Cart");
+  removeProductFromCart(cartId:number){ 
+    //let elements = this.productsService.cartProducts.splice(prdIdx, 1);
+    //console.log(elements[0]['title'], "Product Removed from Cart");
+    this.productsService.deleteCartItem(cartId).subscribe(response=>{
+      this.productsService.getCartList();
+    })
     this.calculate();
   }
 
@@ -35,8 +39,9 @@ export class CartListComponent implements OnInit {
   }
 
   calculate() {
+    console.log(this.productsService.cartProducts);
     this.totalItems = this.productsService.cartProducts.reduce((prev,next)=> prev+next['quantity'],0);
-    this.totalPrice = this.productsService.cartProducts.reduce((prev,next)=> prev+ (next['quantity']*next['price']),0);
+    this.totalPrice = this.productsService.cartProducts.reduce((prev,next)=> prev+ (next['quantity']*next.products['price']),0);
   }
 
 }

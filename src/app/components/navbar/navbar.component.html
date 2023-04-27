@@ -10,10 +10,10 @@
             <a class="nav-link" aria-current="page" routerLink=""  routerLinkActive>Dashboard</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" routerLink="/products"  routerLinkActive>Products</a>
+            <a class="nav-link" *ngIf="authService.isLoggedIn()" aria-current="page" routerLink="/products"  routerLinkActive>Products</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" routerLink="/products/cartlist"  routerLinkActive>Shoping Cart
+            <a class="nav-link" *ngIf="authService.isLoggedIn()" aria-current="page" routerLink="/products/cartlist"  routerLinkActive>Shoping Cart
               <span class="position-absoulte top-2 start-10 translate-middle badge rounded-pill bg-danger">
                 {{this.productService.cartProducts.length || 0 }}
                 <span class="visually-hidden">unread messages</span>
@@ -22,7 +22,7 @@
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" routerLink="/products/whishlist"  routerLinkActive>Whishlist
+            <a class="nav-link" *ngIf="authService.isLoggedIn()" aria-current="page" routerLink="/products/whishlist"  routerLinkActive>Whishlist
               <span class="position-absoulte top-2 start-10 translate-middle badge rounded-pill bg-danger">
                 {{this.productService.whishlistProducts.length || 0 }}
                 <span class="visually-hidden">unread messages</span>
@@ -33,16 +33,16 @@
         </ul>
         <ul class="navbar-nav mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link" aria-current="page" routerLink="auth/login"  routerLinkActive>Sign In</a>
+                <a class="nav-link" *ngIf="!authService.isLoggedIn()" aria-current="page" routerLink="auth/login"  routerLinkActive>Sign In</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" routerLink="auth/register"  routerLinkActive>Sign Up</a>
+                <a class="nav-link" *ngIf="!authService.isLoggedIn()" aria-current="page" routerLink="auth/register"  routerLinkActive>Sign Up</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" routerLink="auth/logout"  routerLinkActive>Logout</a>
+              <li class="nav-item" *ngIf="authService.isLoggedIn()">
+                <a class="nav-link" aria-current="page" routerLink="auth/logout" (click)="onLogOut()"  routerLinkActive>Logout</a>
               </li>
 
-              <li class="nav-item dropdown">
+              <li class="nav-item dropdown"  *ngIf="authService.isLoggedIn()">
                 <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" 
                 data-bs-toggle="dropdown" aria-expanded="false">
                 Account
