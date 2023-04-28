@@ -14,7 +14,7 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" *ngIf="authService.isLoggedIn()" aria-current="page" routerLink="/products/cartlist"  routerLinkActive>Shoping Cart
-              <span class="position-absoulte top-2 start-10 translate-middle badge rounded-pill bg-danger">
+              <span *ngIf="productService.cartProducts.length !==0" class="position-absoulte top-2 start-10 translate-middle badge rounded-pill bg-danger">
                 {{this.productService.cartProducts.length || 0 }}
                 <span class="visually-hidden">unread messages</span>
               </span>
@@ -23,7 +23,7 @@
           
           <li class="nav-item">
             <a class="nav-link" *ngIf="authService.isLoggedIn()" aria-current="page" routerLink="/products/whishlist"  routerLinkActive>Whishlist
-              <span class="position-absoulte top-2 start-10 translate-middle badge rounded-pill bg-danger">
+              <span *ngIf="productService.whishlistProducts.length !==0" class="position-absoulte top-2 start-10 translate-middle badge rounded-pill bg-danger">
                 {{this.productService.whishlistProducts.length || 0 }}
                 <span class="visually-hidden">unread messages</span>
               </span>
